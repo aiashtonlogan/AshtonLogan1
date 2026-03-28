@@ -259,37 +259,41 @@
   </section>
 
   <!-- CONTACT -->
-  <section id="contact">
-    <div class="contact-left reveal">
-      <h2>Ready to<br><em>Build?</em></h2>
-      <p>Whether you're a college athlete looking for NIL deals, a high school prospect building your recruiting profile, or anyone in between — let's talk about what your brand can become.</p>
+<section id="contact" style="background:var(--charcoal);padding:120px 60px;border-top:1px solid var(--border)">
+  <div style="max-width:1000px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start">
+    <div>
+      <p class="section-label">Get In Touch</p>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,5vw,68px);line-height:1;color:var(--text-bright);margin-bottom:16px">Ready to<br><em style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--accent)">Build?</em></h2>
+      <p style="font-size:1rem;font-weight:300;line-height:1.7;color:var(--text-mid);margin-bottom:40px">Fill out the form and I'll get back to you within 24 hours. No pressure, no pitch — just a real conversation about what your brand can become.</p>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="background:var(--surface);padding:16px 20px;display:flex;gap:16px;align-items:flex-start"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--accent);line-height:1;flex-shrink:0">01</div><div style="font-size:.9rem;font-weight:300;line-height:1.6;color:var(--text-mid)"><strong style="color:var(--text-bright)">You fill this out</strong> — takes 2 minutes. Tell me where you're at and what you're looking for.</div></div>
+        <div style="background:var(--surface);padding:16px 20px;display:flex;gap:16px;align-items:flex-start"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--accent);line-height:1;flex-shrink:0">02</div><div style="font-size:.9rem;font-weight:300;line-height:1.6;color:var(--text-mid)"><strong style="color:var(--text-bright)">I review and respond</strong> — within 24 hours, I'll reach out to your email directly.</div></div>
+        <div style="background:var(--surface);padding:16px 20px;display:flex;gap:16px;align-items:flex-start"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--accent);line-height:1;flex-shrink:0">03</div><div style="font-size:.9rem;font-weight:300;line-height:1.6;color:var(--text-mid)"><strong style="color:var(--text-bright)">We get on a call</strong> — free strategy call to figure out exactly what you need.</div></div>
+        <div style="background:var(--surface);padding:16px 20px;display:flex;gap:16px;align-items:flex-start"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--accent);line-height:1;flex-shrink:0">04</div><div style="font-size:.9rem;font-weight:300;line-height:1.6;color:var(--text-mid)"><strong style="color:var(--text-bright)">We build</strong> — website, brand, NIL strategy. Fast, clean, done.</div></div>
+      </div>
     </div>
-    <div class="contact-right reveal">
-  <form id="intakeForm" action="https://formspree.io/f/xnjopakq" method="POST" style="display:flex;flex-direction:column;gap:12px;min-width:320px">
-    <input type="text" name="name" placeholder="Your Name" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;transition:border-color .3s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
-    <input type="email" name="email" placeholder="Your Email" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;transition:border-color .3s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
-    <input type="text" name="sport_school" placeholder="Sport &amp; School (e.g. QB — Texas A&amp;M)" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;transition:border-color .3s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
-    <select name="following" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-mid);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;cursor:pointer">
-      <option value="" disabled selected>Instagram Following</option>
-      <option>Under 1K</option>
-      <option>1K – 5K</option>
-      <option>5K – 10K</option>
-      <option>10K – 50K</option>
-      <option>50K+</option>
-    </select>
-    <select name="service" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-mid);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;cursor:pointer">
-      <option value="" disabled selected>What do you need?</option>
-      <option>Personal Brand Website</option>
-      <option>NIL Strategy &amp; Positioning</option>
-      <option>Social Media Identity</option>
-      <option>Full Brand Package</option>
-      <option>Not sure — just want to talk</option>
-    </select>
-    <textarea name="message" placeholder="Tell me about yourself and your goals..." rows="4" style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;resize:none;transition:border-color .3s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea>
-    <button type="submit" style="padding:16px;background:var(--accent);color:var(--black);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;transition:background .3s">Send It →</button>
-  </form>
-</div>
-  </section>
+    <div>
+      <form id="intakeForm" action="https://formspree.io/f/xnjopakq" method="POST" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)">Your Name</div><input type="text" name="name" placeholder="First Last" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;transition:border-color .3s;width:100%" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)">Your Email</div><input type="email" name="email" placeholder="you@email.com" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;transition:border-color .3s;width:100%" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)">Sport & School</div><input type="text" name="sport_school" placeholder="e.g. QB — Texas A&M" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;transition:border-color .3s;width:100%" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)">Instagram Following</div><select name="following" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-mid);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;cursor:pointer;width:100%"><option value="" disabled selected>Current followers</option><option>Under 1K</option><option>1K – 5K</option><option>5K – 10K</option><option>10K – 50K</option><option>50K+</option></select></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)">What Do You Need?</div><select name="service" required style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-mid);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;cursor:pointer;width:100%"><option value="" disabled selected>Select a service</option><option>Personal Brand Website</option><option>NIL Strategy & Positioning</option><option>Social Media Identity</option><option>Full Brand Package</option><option>Not sure — just want to talk</option></select></div>
+        <div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)">Tell Me About Yourself</div><textarea name="message" placeholder="Where are you at in your career? What opportunities are you trying to create?" rows="4" style="background:var(--surface);border:1px solid var(--border);padding:14px 18px;color:var(--text-bright);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.1em;outline:none;resize:none;transition:border-color .3s;width:100%" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></textarea></div>
+        <button type="submit" style="padding:16px;background:var(--accent);color:var(--black);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;transition:background .3s">Send It →</button>
+        <p id="formSuccess" style="display:none;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--accent);text-align:center;padding:16px;background:var(--surface);border:1px solid var(--border)">✓ Got it! I'll be in touch within 24 hours.</p>
+      </form>
+      <script>
+        document.getElementById('intakeForm').addEventListener('submit',async function(e){
+          e.preventDefault();
+          const data=new FormData(this);
+          const r=await fetch('https://formspree.io/f/xnjopakq',{method:'POST',body:data,headers:{'Accept':'application/json'}});
+          if(r.ok){this.reset();document.getElementById('formSuccess').style.display='block';}
+        });
+      </script>
+    </div>
+  </div>
+</section>
 
   <footer>
     <div class="footer-logo">ASHTON <span>LOGAN</span></div>
