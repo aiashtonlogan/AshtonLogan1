@@ -173,11 +173,112 @@
       .fitness-header{flex-direction:column;align-items:flex-start;gap:16px}.fitness-sub{text-align:left;max-width:100%}
       footer{padding:32px 28px;flex-direction:column;gap:16px;text-align:center}
     }
+
+/* ── MENTALITY OVERLAY ───────────────────────── */
+#mentality-overlay{
+  position:fixed;inset:0;z-index:1000;background:#000;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;
+  transition:opacity .6s ease,visibility .6s ease;
+}
+#mentality-overlay.active{opacity:1;visibility:visible}
+#mentality-overlay.fading-out{opacity:0;transition:opacity .8s ease}
+#mentality-overlay::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(to bottom,transparent 0px,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+}
+#mentality-video{width:100%;height:100%;object-fit:cover;display:block}
+.overlay-topbar{
+  position:absolute;top:0;left:0;right:0;padding:32px 48px;
+  display:flex;justify-content:space-between;align-items:center;z-index:10;
+  background:linear-gradient(to bottom,rgba(0,0,0,0.7),transparent);
+}
+.overlay-label{
+  font-family:'DM Mono',monospace;font-size:.6rem;
+  letter-spacing:.4em;text-transform:uppercase;color:rgba(176,176,176,0.5);
+}
+.overlay-skip{
+  font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.25em;
+  text-transform:uppercase;color:rgba(176,176,176,0.4);
+  background:none;border:1px solid rgba(176,176,176,0.15);
+  padding:10px 20px;cursor:none;transition:color .3s,border-color .3s;
+}
+.overlay-skip:hover{color:var(--accent);border-color:var(--accent-dim)}
+.overlay-enter{
+  position:absolute;bottom:80px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.4em;
+  color:var(--text-bright);background:none;
+  border:1px solid rgba(176,176,176,0.4);padding:18px 64px;
+  cursor:none;opacity:0;z-index:10;
+  transition:opacity .6s ease,transform .6s ease,background .3s,color .3s;
+}
+.overlay-enter.visible{opacity:1;transform:translateX(-50%) translateY(0)}
+.overlay-enter:hover{background:var(--accent);color:var(--black);border-color:var(--accent)}
+.overlay-progress{
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:rgba(255,255,255,0.08);z-index:10;
+}
+.overlay-progress-fill{height:100%;background:var(--accent);width:0%;transition:width .1s linear}
+
+/* ── MENTALITY SECTION ───────────────────────── */
+#mentality{background:var(--black);padding:120px 60px;position:relative;overflow:hidden}
+#mentality::before{
+  content:'MENTALITY';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(120px,18vw,260px);color:rgba(255,255,255,0.018);
+  letter-spacing:.08em;white-space:nowrap;pointer-events:none;user-select:none;
+}
+.mentality-header{margin-bottom:80px;border-bottom:1px solid var(--border);padding-bottom:40px;position:relative;z-index:2}
+.mentality-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(64px,8vw,120px);line-height:.9;color:var(--text-bright);letter-spacing:.02em}
+.mentality-heading em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--accent)}
+.mentality-subhead{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(16px,1.8vw,22px);color:var(--text-mid);margin-top:20px;max-width:600px;line-height:1.7}
+.mentality-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:80px;position:relative;z-index:2}
+.mentality-pillar{background:var(--surface);padding:48px 36px;position:relative;overflow:hidden;transition:background .3s}
+.mentality-pillar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .5s ease}
+.mentality-pillar:hover::before{transform:scaleX(1)}
+.mentality-pillar:hover{background:#181818}
+.pillar-number{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:rgba(176,176,176,0.05);line-height:1;margin-bottom:24px}
+.pillar-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.06em;color:var(--text-bright);margin-bottom:16px}
+.pillar-body{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1rem;line-height:1.85;color:var(--text-dim)}
+.mentality-bottom{display:grid;grid-template-columns:1fr 1fr;gap:3px;position:relative;z-index:2}
+.mentality-quote-block{background:var(--surface);padding:64px 48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.mentality-quote-block::after{content:'"';position:absolute;top:-20px;left:32px;font-family:'Cormorant Garamond',serif;font-size:200px;color:rgba(176,176,176,0.04);line-height:1;pointer-events:none}
+.mentality-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(22px,2.4vw,34px);color:var(--text-bright);line-height:1.5;margin-bottom:24px;position:relative;z-index:1}
+.mentality-quote span{color:var(--accent-light)}
+.mentality-quote-attr{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim)}
+.mentality-manifesto{background:#0a0a0a;padding:64px 48px;border-left:1px solid var(--border);display:flex;flex-direction:column;gap:28px;justify-content:center}
+.manifesto-line{display:flex;align-items:flex-start;gap:20px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.manifesto-line:last-child{border-bottom:none;padding-bottom:0}
+.manifesto-marker{font-family:'DM Mono',monospace;font-size:.55rem;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;padding-top:4px;flex-shrink:0;width:28px}
+.manifesto-text{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.05rem;line-height:1.75;color:var(--text-mid)}
+.manifesto-text strong{color:var(--text-bright);font-weight:600}
+
+@media(max-width:900px){
+  .mentality-pillars{grid-template-columns:1fr}
+  .mentality-bottom{grid-template-columns:1fr}
+  #mentality{padding:80px 28px}
+  .overlay-topbar{padding:24px 28px}
+}
   </style>
 </head>
 <body>
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
+
+  <div id="mentality-overlay">
+    <video id="mentality-video" playsinline preload="none">
+      <source src="media/mentality.mp4" type="video/mp4"/>
+    </video>
+    <div class="overlay-topbar">
+      <span class="overlay-label">Ashton Logan — Mentality</span>
+      <button class="overlay-skip" id="overlay-skip">Skip →</button>
+    </div>
+    <button class="overlay-enter" id="overlay-enter">Enter</button>
+    <div class="overlay-progress">
+      <div class="overlay-progress-fill" id="overlay-progress-fill"></div>
+    </div>
+  </div>
 
   <nav>
     <a href="#hero" class="nav-logo">ASHTON <span>LOGAN</span></a>
@@ -186,6 +287,7 @@
       <li><a href="#stats">Stats</a></li>
       <li><a href="#gallery">Photos</a></li>
       <li><a href="#highlights">Career</a></li>
+      <li><a href="#mentality" id="mentality-nav-btn">Mentality</a></li>
       <li><a href="#fitness">Training</a></li>
       <li><a href="#follow">Follow</a></li>
       <li><a href="https://www.loganbrands.com" target="_blank" style="color:var(--accent)">Logan Brands</a></li>
@@ -200,6 +302,7 @@
     <a href="#stats" class="mobile-link">Stats</a>
     <a href="#gallery" class="mobile-link">Photos</a>
     <a href="#highlights" class="mobile-link">Career</a>
+    <a href="#mentality" class="mobile-link" id="mentality-mobile-btn">Mentality</a>
     <a href="#fitness" class="mobile-link">Training</a>
     <a href="#follow" class="mobile-link">Follow</a>
     <a href="https://www.loganbrands.com" target="_blank" class="mobile-link" style="color:var(--accent)">Logan Brands</a>
@@ -360,6 +463,55 @@
     </div>
   </section>
 
+  <section id="mentality">
+    <div class="mentality-header reveal">
+      <p class="section-label">The Mindset</p>
+      <h2 class="mentality-heading">What Drives<br><em>Everything.</em></h2>
+      <p class="mentality-subhead">The physical is just the surface. What separates elite from average lives between the ears — and the will to protect it at all costs.</p>
+    </div>
+    <div class="mentality-pillars">
+      <div class="mentality-pillar reveal">
+        <div class="pillar-number">01</div>
+        <div class="pillar-title">Pressure Is a Privilege</div>
+        <div class="pillar-body">The moments that define careers are the ones most people run from. 4th-and-1 with the game on the line. A 6 AM lift when nobody's watching. Pressure doesn't reveal weakness — it reveals preparation.</div>
+      </div>
+      <div class="mentality-pillar reveal" style="transition-delay:.1s">
+        <div class="pillar-number">02</div>
+        <div class="pillar-title">Process Over Outcome</div>
+        <div class="pillar-body">Four programs. Hundreds of reps nobody saw. The scoreboard doesn't always reflect the work — but the work always shows up eventually. I trust the process of doing the right thing every day, whether it's recognized or not.</div>
+      </div>
+      <div class="mentality-pillar reveal" style="transition-delay:.2s">
+        <div class="pillar-number">03</div>
+        <div class="pillar-title">Standard, Not Mood</div>
+        <div class="pillar-body">I don't have good days and bad days. I have a standard. Some days it's harder to hit — but the standard doesn't move based on how I feel. That's what separates people who want it from people who have it.</div>
+      </div>
+    </div>
+    <div class="mentality-bottom">
+      <div class="mentality-quote-block reveal">
+        <p class="mentality-quote">"I'm not trying to be the best punter in the country. I'm trying to be the best <span>version of myself</span> — and trust that's more than enough."</p>
+        <p class="mentality-quote-attr">— Ashton Logan</p>
+      </div>
+      <div class="mentality-manifesto reveal" style="transition-delay:.15s">
+        <div class="manifesto-line">
+          <span class="manifesto-marker">—</span>
+          <p class="manifesto-text">Every rep is a <strong>vote for the athlete I'm becoming</strong>, not the one I am today.</p>
+        </div>
+        <div class="manifesto-line">
+          <span class="manifesto-marker">—</span>
+          <p class="manifesto-text">Transferring four times didn't break me. It showed me I can <strong>build anywhere</strong> — I carry my standard with me.</p>
+        </div>
+        <div class="manifesto-line">
+          <span class="manifesto-marker">—</span>
+          <p class="manifesto-text">The aesthetic isn't vanity. It's proof that <strong>discipline compounds</strong> — in the gym, on the field, in business.</p>
+        </div>
+        <div class="manifesto-line">
+          <span class="manifesto-marker">—</span>
+          <p class="manifesto-text">An MBA while playing college football isn't a flex. It's a reminder that <strong>the game ends</strong> — and I'm building for after it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="fitness">
     <div class="fitness-header reveal">
       <div>
@@ -449,6 +601,52 @@
         mobileMenu.classList.remove('open');
         document.body.style.overflow='';
       });
+    });
+
+    // ── MENTALITY OVERLAY ──────────────────────────
+    const overlay            = document.getElementById('mentality-overlay');
+    const video              = document.getElementById('mentality-video');
+    const skipBtn            = document.getElementById('overlay-skip');
+    const enterBtn           = document.getElementById('overlay-enter');
+    const progressFill       = document.getElementById('overlay-progress-fill');
+    const mentalityNavBtn    = document.getElementById('mentality-nav-btn');
+    const mentalityMobileBtn = document.getElementById('mentality-mobile-btn');
+
+    function openOverlay(e){
+      e.preventDefault();
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = 'hidden';
+      overlay.classList.add('active');
+      video.currentTime = 0;
+      enterBtn.classList.remove('visible');
+      progressFill.style.width = '0%';
+      setTimeout(()=>{
+        video.play().catch(()=>{ enterBtn.classList.add('visible'); });
+      }, 400);
+    }
+
+    function closeOverlay(){
+      overlay.classList.add('fading-out');
+      video.pause();
+      setTimeout(()=>{
+        overlay.classList.remove('active','fading-out');
+        document.body.style.overflow = '';
+        document.getElementById('mentality').scrollIntoView({behavior:'smooth'});
+      }, 800);
+    }
+
+    mentalityNavBtn.addEventListener('click', openOverlay);
+    if(mentalityMobileBtn) mentalityMobileBtn.addEventListener('click', openOverlay);
+    skipBtn.addEventListener('click', closeOverlay);
+    enterBtn.addEventListener('click', closeOverlay);
+
+    video.addEventListener('timeupdate',()=>{
+      if(video.duration) progressFill.style.width = (video.currentTime/video.duration*100)+'%';
+    });
+    video.addEventListener('ended',()=>{ enterBtn.classList.add('visible'); });
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='Escape' && overlay.classList.contains('active')) closeOverlay();
     });
   </script>
 </body>
