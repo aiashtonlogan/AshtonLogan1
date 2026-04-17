@@ -174,53 +174,6 @@
       footer{padding:32px 28px;flex-direction:column;gap:16px;text-align:center}
     }
 
-/* ── MENTALITY OVERLAY ───────────────────────── */
-#mentality-overlay{
-  position:fixed;inset:0;z-index:1000;background:#000;
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;visibility:hidden;
-  transition:opacity .6s ease,visibility .6s ease;
-}
-#mentality-overlay.active{opacity:1;visibility:visible}
-#mentality-overlay.fading-out{opacity:0;transition:opacity .8s ease}
-#mentality-overlay::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
-  background:repeating-linear-gradient(to bottom,transparent 0px,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
-}
-#mentality-video{width:100%;height:100%;object-fit:cover;display:block}
-.overlay-topbar{
-  position:absolute;top:0;left:0;right:0;padding:32px 48px;
-  display:flex;justify-content:space-between;align-items:center;z-index:10;
-  background:linear-gradient(to bottom,rgba(0,0,0,0.7),transparent);
-}
-.overlay-label{
-  font-family:'DM Mono',monospace;font-size:.6rem;
-  letter-spacing:.4em;text-transform:uppercase;color:rgba(176,176,176,0.5);
-}
-.overlay-skip{
-  font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.25em;
-  text-transform:uppercase;color:rgba(176,176,176,0.4);
-  background:none;border:1px solid rgba(176,176,176,0.15);
-  padding:10px 20px;cursor:none;transition:color .3s,border-color .3s;
-}
-.overlay-skip:hover{color:var(--accent);border-color:var(--accent-dim)}
-.overlay-enter{
-  position:absolute;bottom:80px;left:50%;
-  transform:translateX(-50%) translateY(20px);
-  font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.4em;
-  color:var(--text-bright);background:none;
-  border:1px solid rgba(176,176,176,0.4);padding:18px 64px;
-  cursor:none;opacity:0;z-index:10;
-  transition:opacity .6s ease,transform .6s ease,background .3s,color .3s;
-}
-.overlay-enter.visible{opacity:1;transform:translateX(-50%) translateY(0)}
-.overlay-enter:hover{background:var(--accent);color:var(--black);border-color:var(--accent)}
-.overlay-progress{
-  position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:rgba(255,255,255,0.08);z-index:10;
-}
-.overlay-progress-fill{height:100%;background:var(--accent);width:0%;transition:width .1s linear}
-
 /* ── MENTALITY SECTION ───────────────────────── */
 #mentality{background:var(--black);padding:120px 60px;position:relative;overflow:hidden}
 #mentality::before{
@@ -258,27 +211,12 @@
   .mentality-pillars{grid-template-columns:1fr}
   .mentality-bottom{grid-template-columns:1fr}
   #mentality{padding:80px 28px}
-  .overlay-topbar{padding:24px 28px}
 }
   </style>
 </head>
 <body>
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
-
-  <div id="mentality-overlay">
-    <video id="mentality-video" playsinline preload="none">
-      <source src="media/mentality.mp4" type="video/mp4"/>
-    </video>
-    <div class="overlay-topbar">
-      <span class="overlay-label">Ashton Logan — Mentality</span>
-      <button class="overlay-skip" id="overlay-skip">Skip →</button>
-    </div>
-    <button class="overlay-enter" id="overlay-enter">Enter</button>
-    <div class="overlay-progress">
-      <div class="overlay-progress-fill" id="overlay-progress-fill"></div>
-    </div>
-  </div>
 
   <nav>
     <a href="#hero" class="nav-logo">ASHTON <span>LOGAN</span></a>
@@ -603,51 +541,6 @@
       });
     });
 
-    // ── MENTALITY OVERLAY ──────────────────────────
-    const overlay            = document.getElementById('mentality-overlay');
-    const video              = document.getElementById('mentality-video');
-    const skipBtn            = document.getElementById('overlay-skip');
-    const enterBtn           = document.getElementById('overlay-enter');
-    const progressFill       = document.getElementById('overlay-progress-fill');
-    const mentalityNavBtn    = document.getElementById('mentality-nav-btn');
-    const mentalityMobileBtn = document.getElementById('mentality-mobile-btn');
-
-    function openOverlay(e){
-      e.preventDefault();
-      hamburger.classList.remove('open');
-      mobileMenu.classList.remove('open');
-      document.body.style.overflow = 'hidden';
-      overlay.classList.add('active');
-      video.currentTime = 0;
-      enterBtn.classList.remove('visible');
-      progressFill.style.width = '0%';
-      setTimeout(()=>{
-        video.play().catch(()=>{ enterBtn.classList.add('visible'); });
-      }, 400);
-    }
-
-    function closeOverlay(){
-      overlay.classList.add('fading-out');
-      video.pause();
-      setTimeout(()=>{
-        overlay.classList.remove('active','fading-out');
-        document.body.style.overflow = '';
-        document.getElementById('mentality').scrollIntoView({behavior:'smooth'});
-      }, 800);
-    }
-
-    mentalityNavBtn.addEventListener('click', openOverlay);
-    if(mentalityMobileBtn) mentalityMobileBtn.addEventListener('click', openOverlay);
-    skipBtn.addEventListener('click', closeOverlay);
-    enterBtn.addEventListener('click', closeOverlay);
-
-    video.addEventListener('timeupdate',()=>{
-      if(video.duration) progressFill.style.width = (video.currentTime/video.duration*100)+'%';
-    });
-    video.addEventListener('ended',()=>{ enterBtn.classList.add('visible'); });
-    document.addEventListener('keydown',(e)=>{
-      if(e.key==='Escape' && overlay.classList.contains('active')) closeOverlay();
-    });
   </script>
 </body>
 </html>
