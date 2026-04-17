@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mentality — Ashton Logan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #060606;
+      --surface: #0d0d0d;
+      --border: #1a1a1a;
+      --text-dim: #3a3a3a;
+      --text-mid: #787878;
+      --text-main: #b8b8b8;
+      --text-bright: #efefef;
+      --accent: #b0b0b0;
+      --accent-light: #d8d8d8;
+      --red: #c0392b;
+      --red-dim: rgba(192,57,43,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── GRAIN OVERLAY ─────────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      z-index: 9000;
+      opacity: .6;
+    }
+
+    /* ── CURSOR ────────────────────────────────────── */
+    .cursor {
+      position: fixed; width: 6px; height: 6px;
+      background: var(--accent); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform .1s;
+    }
+    .cursor-ring {
+      position: fixed; width: 28px; height: 28px;
+      border: 1px solid rgba(176,176,176,0.3); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, border-color .2s;
+    }
+    body:has(a:hover) .cursor-ring,
+    body:has(button:hover) .cursor-ring { width: 44px; height: 44px; border-color: var(--accent); }
+    @media (hover: none) and (pointer: coarse) {
+      .cursor, .cursor-ring { display: none; }
+      * { cursor: auto !important; }
+    }
+
+    /* ── NAV ───────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 60px;
+      background: linear-gradient(to bottom, rgba(6,6,6,0.95), transparent);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+      letter-spacing: .18em; color: var(--text-bright); text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-family: 'DM Mono', monospace; font-size: .6rem;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      transition: color .3s; display: flex; align-items: center; gap: 10px;
+    }
+    .nav-back::before { content: '←'; font-size: .8rem; }
+    .nav-back:hover { color: var(--accent); }
+
+    /* ── ENTRY GATE ────────────────────────────────── */
+    #gate {
+      position: fixed; inset: 0; z-index: 800;
+      background: var(--black);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+    #gate.unlocked { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .gate-eyebrow {
+      font-family: 'DM Mono', monospace; font-size: .55rem;
+      letter-spacing: .5em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 48px;
+      opacity: 0; animation: fadeUp .8s ease .3s forwards;
+    }
+    .gate-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 14vw, 180px);
+      line-height: .85; color: var(--text-bright);
+      letter-spacing: .04em; text-align: center;
+      opacity: 0; animation: fadeUp 1s ease .5s forwards;
+    }
+    .gate-title .dim { color: var(--text-dim); }
+    .gate-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(15px, 1.6vw, 20px);
+      color: var(--text-mid); margin-top: 32px; text-align: center;
+      max-width: 480px; line-height: 1.7;
+      opacity: 0; animation: fadeUp .9s ease .8s forwards;
+    }
+    .gate-enter {
+      margin-top: 64px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem; letter-spacing: .5em;
+      color: var(--black); background: var(--accent);
+      border: none; padding: 20px 72px;
+      cursor: none; position: relative; overflow: hidden;
+      opacity: 0; animation: fadeUp .9s ease 1.1s forwards;
+      transition: background .3s, transform .2s;
+    }
+    .gate-enter::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-100%);
+      transition: transform .4s ease;
+    }
+    .gate-enter:hover::after { transform: translateX(0); }
+    .gate-enter:hover { transform: translateY(-2px); }
+
+    /* Vault lines decorating gate */
+    .gate-lines {
+      position: absolute; inset: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .gate-lines::before, .gate-lines::after {
+      content: '';
+      position: absolute;
+      border: 1px solid var(--border);
+    }
+    .gate-lines::before {
+      top: 60px; bottom: 60px; left: 60px; right: 60px;
+      opacity: .4;
+    }
+    .gate-lines::after {
+      top: 80px; bottom: 80px; left: 80px; right: 80px;
+      opacity: .2;
+    }
+
+    /* ── PROGRESS BAR ──────────────────────────────── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 1px;
+      background: var(--accent); z-index: 600;
+      width: 0%; transition: width .1s linear;
+    }
+
+    /* ── CHAPTER INDICATOR ─────────────────────────── */
+    #chapter-indicator {
+      position: fixed; right: 48px; top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 12px;
+      z-index: 500; opacity: 0; transition: opacity .5s;
+    }
+    #chapter-indicator.visible { opacity: 1; }
+    .chap-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--text-dim); cursor: none;
+      transition: background .3s, transform .3s;
+      position: relative;
+    }
+    .chap-dot.active { background: var(--accent); transform: scale(1.5); }
+    .chap-dot::after {
+      content: attr(data-label);
+      position: absolute; right: 18px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'DM Mono', monospace; font-size: .5rem;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--text-dim); white-space: nowrap;
+      opacity: 0; transition: opacity .3s;
+      pointer-events: none;
+    }
+    .chap-dot:hover::after, .chap-dot.active::after { opacity: 1; }
+
+    /* ── SHARED SECTION STYLES ─────────────────────── */
+    .chapter {
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── INTRO CHAPTER ─────────────────────────────── */
+    #intro {
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 80px 100px;
+      background: var(--black);
+    }
+    .intro-overline {
+      font-family: 'DM Mono', monospace; font-size: .6rem;
+      letter-spacing: .4em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 24px;
+    }
+    .intro-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(60px, 10vw, 140px);
+      line-height: .88; color: var(--text-bright);
+      letter-spacing: .02em;
+    }
+    .intro-heading .ghost {
+      -webkit-text-stroke: 1px var(--text-dim);
+      color: transparent;
+    }
+    .intro-body {
+      margin-top: 40px; max-width: 560px;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(15px, 1.5vw, 19px);
+      color: var(--text-mid); line-height: 1.8;
+    }
+    .intro-scroll-hint {
+      margin-top: 60px;
+      font-family: 'DM Mono', monospace; font-size: .55rem;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--text-dim); display: flex; align-items: center; gap: 16px;
+    }
+    .intro-scroll-hint::after {
+      content: ''; display: block; width: 60px; height: 1px;
+      background: linear-gradient(to right, var(--text-dim), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    /* Big ghost number */
+    .intro-ghost-num {
+      position: absolute; right: -20px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(200px, 30vw, 400px);
+      color: rgba(255,255,255,0.02);
+      line-height: 1; pointer-events: none; user-select: none;
+    }
+
+    /* ── PRESSURE CHAPTER ──────────────────────────── */
+    #pressure {
+      background: var(--black);
+      padding: 140px 80px;
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .section-tag {
+      font-family: 'DM Mono', monospace; font-size: .58rem;
+      letter-spacing: .45em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .section-tag::before {
+      content: ''; display: block; width: 32px; height: 1px;
+      background: var(--text-dim);
+    }
+
+    .section-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 11vw, 160px);
+      line-height: .85; color: var(--text-bright);
+      letter-spacing: .02em;
+      position: relative; z-index: 2;
+    }
+    .section-heading em {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      color: var(--accent); display: block;
+      font-size: .55em;
+    }
+
+    /* Pressure statement row */
+    .pressure-statement {
+      margin-top: 80px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3px; position: relative; z-index: 2;
+    }
+    .statement-block {
+      background: var(--surface);
+      padding: 56px 48px;
+      position: relative; overflow: hidden;
+      border-left: 2px solid transparent;
+      transition: border-color .4s, background .3s;
+    }
+    .statement-block:hover {
+      border-left-color: var(--accent);
+      background: #111;
+    }
+    .statement-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 6rem; color: rgba(255,255,255,0.03);
+      line-height: 1; position: absolute;
+      top: 16px; right: 24px; pointer-events: none;
+    }
+    .statement-label {
+      font-family: 'DM Mono', monospace; font-size: .55rem;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 20px;
+    }
+    .statement-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300; font-size: clamp(18px, 1.8vw, 26px);
+      line-height: 1.6; color: var(--text-main);
+    }
+    .statement-text strong { color: var(--text-bright); font-weight: 600; }
+
+    /* Pressure videos */
+    .pressure-videos {
+      margin-top: 3px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+    /* TO ADD MORE PRESSURE VIDEOS: duplicate a .video-slot div
+       and update the label and src path */
+    .video-slot {
+      position: relative; background: #000;
+      overflow: hidden; aspect-ratio: 16/9;
+    }
+    .video-slot video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      opacity: .85; transition: opacity .4s;
+    }
+    .video-slot:hover video { opacity: 1; }
+    .video-slot-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(6,6,6,0.8) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .video-slot-label {
+      position: absolute; bottom: 20px; left: 24px;
+      font-family: 'DM Mono', monospace; font-size: .55rem;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--accent); pointer-events: none;
+    }
+    /* Play button overlay */
+    .video-play-btn {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px; height: 56px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: none; transition: background .3s, border-color .3s, transform .3s;
+      z-index: 2;
+    }
+    .video-play-btn::after {
+      content: '';
+      border-left: 14px solid var(--text-bright);
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      margin-left: 4px;
+    }
+    .video-slot.playing .video-play-btn { opacity: 0; }
+    .video-slot:hover .video-play-btn {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--accent);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    /* Add video placeholder slot */
+    .video-slot-add {
+      aspect-ratio: 16/9;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; opacity: .4;
+    }
+    .video-slot-add span:first-child {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; color: var(--text-dim);
+    }
+    .video-slot-add span:last-child {
+      font-family: 'DM Mono', monospace; font-size: .5rem;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ── DIVIDER ───────────────────────────────────── */
+    .chapter-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 0 80px;
+    }
+
+    /* ── FEAR CHAPTER ──────────────────────────────── */
+    #fear {
+      background: var(--black);
+      padding: 140px 80px;
+    }
+
+    /* Fear quote pulls wide */
+    .fear-opening {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+      margin-bottom: 80px;
+    }
+    .fear-quote-left {
+      position: relative;
+    }
+    .fear-quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12rem; color: rgba(255,255,255,0.03);
+      line-height: 1; position: absolute; top: -40px; left: -20px;
+      pointer-events: none;
+    }
+    .fear-quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(22px, 2.6vw, 38px);
+      color: var(--text-bright); line-height: 1.5;
+      position: relative; z-index: 1;
+    }
+    .fear-quote-text span { color: var(--accent-light); }
+    .fear-quote-attr {
+      margin-top: 24px;
+      font-family: 'DM Mono', monospace; font-size: .55rem;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .fear-right-copy {
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .fear-right-copy p {
+      font-weight: 300; font-size: clamp(14px, 1.4vw, 17px);
+      line-height: 1.9; color: var(--text-mid);
+    }
+    .fear-right-copy p strong { color: var(--text-main); font-weight: 600; }
+
+    /* Fear video — full width dramatic */
+    .fear-video-wrap {
+      position: relative;
+      aspect-ratio: 21/9;
+      background: #000;
+      overflow: hidden;
+    }
+    /* TO ADD MORE FEAR VIDEOS: duplicate this .fear-video-wrap block
+       and stack them with margin-top: 3px */
+    .fear-video-wrap video {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      opacity: .8; transition: opacity .4s;
+    }
+    .fear-video-wrap:hover video { opacity: 1; }
+    .fear-video-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(6,6,6,0.6) 0%, transparent 40%, transparent 60%, rgba(6,6,6,0.6) 100%);
+      pointer-events: none;
+    }
+    .fear-video-label {
+      position: absolute; bottom: 28px; left: 48px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem;
+      letter-spacing: .12em; color: var(--text-bright);
+    }
+    .fear-video-label span {
+      display: block; font-family: 'DM Mono', monospace;
+      font-size: .52rem; letter-spacing: .3em; color: var(--accent);
+      margin-bottom: 4px; text-transform: uppercase;
+    }
+    .fear-play-btn {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px; height: 72px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: none; transition: all .3s; z-index: 2;
+    }
+    .fear-play-btn::after {
+      content: '';
+      border-left: 18px solid var(--text-bright);
+      border-top: 11px solid transparent;
+      border-bottom: 11px solid transparent;
+      margin-left: 5px;
+    }
+    .fear-video-wrap.playing .fear-play-btn { opacity: 0; }
+    .fear-video-wrap:hover .fear-play-btn {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--accent);
+      transform: translate(-50%, -50%) scale(1.06);
+    }
+
+    /* Fear manifesto lines below video */
+    .fear-lines {
+      margin-top: 3px;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .fear-line-block {
+      background: var(--surface);
+      padding: 40px 36px;
+      border-top: 1px solid transparent;
+      transition: border-color .4s, background .3s;
+    }
+    .fear-line-block:hover {
+      border-top-color: var(--accent);
+      background: #111;
+    }
+    .fear-line-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .9rem; letter-spacing: .2em;
+      color: var(--text-dim); margin-bottom: 16px;
+    }
+    .fear-line-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300; font-size: clamp(15px, 1.4vw, 18px);
+      line-height: 1.75; color: var(--text-mid);
+    }
+    .fear-line-text strong { color: var(--text-main); font-weight: 600; }
+
+    /* ── CLOSING CHAPTER ───────────────────────────── */
+    #closing {
+      min-height: 60vh;
+      background: var(--black);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 100px 60px;
+      border-top: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    #closing::before {
+      content: 'MENTALITY';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 15vw, 200px);
+      color: rgba(255,255,255,0.015);
+      letter-spacing: .06em; white-space: nowrap;
+      pointer-events: none;
+    }
+    .closing-label {
+      font-family: 'DM Mono', monospace; font-size: .55rem;
+      letter-spacing: .45em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 32px;
+    }
+    .closing-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(24px, 3vw, 46px);
+      color: var(--text-bright); max-width: 780px;
+      line-height: 1.45; margin-bottom: 20px;
+    }
+    .closing-quote span { color: var(--accent-light); }
+    .closing-attr {
+      font-family: 'DM Mono', monospace; font-size: .55rem;
+      letter-spacing: .3em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 60px;
+    }
+    .closing-back {
+      font-family: 'DM Mono', monospace; font-size: .6rem;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 14px 36px; transition: all .3s;
+    }
+    .closing-back:hover {
+      color: var(--accent); border-color: var(--accent);
+    }
+
+    /* ── SCROLL REVEAL ─────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Slide from left */
+    .reveal-left {
+      opacity: 0; transform: translateX(-40px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+    /* Slide from right */
+    .reveal-right {
+      opacity: 0; transform: translateX(40px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── KEYFRAMES ─────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: .3; } 50% { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      #intro, #pressure, #fear { padding: 100px 28px 80px; }
+      .chapter-divider { margin: 0 28px; }
+      .pressure-statement, .pressure-videos, .fear-opening, .fear-lines { grid-template-columns: 1fr; }
+      .fear-video-wrap { aspect-ratio: 16/9; }
+      #closing { padding: 80px 28px; }
+      #chapter-indicator { right: 16px; }
+      .gate-lines::before, .gate-lines::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div id="progress-bar"></div>
+
+  <!-- ── ENTRY GATE ──────────────────────────────────── -->
+  <div id="gate">
+    <div class="gate-lines"></div>
+    <p class="gate-eyebrow">Ashton Logan · Private Access</p>
+    <h1 class="gate-title">MENTAL<span class="dim">ITY</span></h1>
+    <p class="gate-sub">This isn't a highlight reel. This is what happens in the space nobody sees — and why it matters more than anything on the scoreboard.</p>
+    <button class="gate-enter" id="gate-enter">Enter The Vault</button>
+  </div>
+
+  <!-- ── NAV ─────────────────────────────────────────── -->
+  <nav>
+    <a href="index.html" class="nav-logo">ASHTON <span>LOGAN</span></a>
+    <a href="index.html" class="nav-back">Back to Site</a>
+  </nav>
+
+  <!-- ── CHAPTER DOTS ─────────────────────────────────── -->
+  <div id="chapter-indicator">
+    <div class="chap-dot active" data-label="Intro" data-target="intro"></div>
+    <div class="chap-dot" data-label="Pressure" data-target="pressure"></div>
+    <div class="chap-dot" data-label="Fear" data-target="fear"></div>
+    <div class="chap-dot" data-label="Close" data-target="closing"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       CHAPTER 1 — INTRO
+  ═══════════════════════════════════════════════════ -->
+  <div class="chapter" id="intro">
+    <div class="intro-ghost-num">01</div>
+    <p class="intro-overline reveal">The Vault · Mentality</p>
+    <h2 class="intro-heading reveal" style="transition-delay:.1s">
+      THE MIND<br>
+      <span class="ghost">THAT MOVES</span><br>
+      THE BODY.
+    </h2>
+    <p class="intro-body reveal" style="transition-delay:.2s">
+      Every punt, every rep, every decision off the field — it starts here. Not in the weight room. Not on the practice field. In the moments when everything tells you to stop and you choose not to.
+    </p>
+    <p class="intro-scroll-hint reveal" style="transition-delay:.35s">Scroll to go deeper</p>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       CHAPTER 2 — PRESSURE
+  ═══════════════════════════════════════════════════ -->
+  <div class="chapter" id="pressure">
+
+    <p class="section-tag reveal">Chapter 01</p>
+    <h2 class="section-heading reveal" style="transition-delay:.1s">
+      PRESSURE
+      <em>is a privilege.</em>
+    </h2>
+
+    <!-- Two statement blocks -->
+    <div class="pressure-statement">
+      <div class="statement-block reveal-left" style="transition-delay:.15s">
+        <div class="statement-number">01</div>
+        <p class="statement-label">The Moment</p>
+        <p class="statement-text">
+          4th-and-1. Game on the line. Sixty thousand people watching one snap. Most people never get that moment. <strong>I built my entire life to be ready for it.</strong>
+        </p>
+      </div>
+      <div class="statement-block reveal-right" style="transition-delay:.25s">
+        <div class="statement-number">02</div>
+        <p class="statement-label">The Standard</p>
+        <p class="statement-text">
+          Pressure doesn't build character — it <strong>reveals the character you already built</strong> in private. Every 5 AM rep is a deposit. The game day is just the withdrawal.
+        </p>
+      </div>
+    </div>
+
+    <!-- ─── PRESSURE VIDEOS ───────────────────────────
+         TO ADD A VIDEO: duplicate one .video-slot div below.
+         Change the <source src=""> to your file path.
+         Change .video-slot-label text to describe the clip.
+         Move it into the .pressure-videos grid.
+    ──────────────────────────────────────────────── -->
+    <div class="pressure-videos reveal" style="transition-delay:.3s">
+
+      <!-- PRESSURE VIDEO 1 -->
+      <div class="video-slot" id="pv1">
+        <video playsinline preload="none" loop>
+          <source src="media/pressure_01.mp4" type="video/mp4"/>
+        </video>
+        <div class="video-slot-overlay"></div>
+        <div class="video-play-btn"></div>
+        <p class="video-slot-label">Pressure · Clip 01</p>
+      </div>
+
+      <!-- PRESSURE VIDEO 2 -->
+      <div class="video-slot" id="pv2">
+        <video playsinline preload="none" loop>
+          <source src="media/pressure_02.mp4" type="video/mp4"/>
+        </video>
+        <div class="video-slot-overlay"></div>
+        <div class="video-play-btn"></div>
+        <p class="video-slot-label">Pressure · Clip 02</p>
+      </div>
+
+      <!-- ADD MORE PRESSURE VIDEOS HERE
+      <div class="video-slot" id="pv3">
+        <video playsinline preload="none" loop>
+          <source src="media/pressure_03.mp4" type="video/mp4"/>
+        </video>
+        <div class="video-slot-overlay"></div>
+        <div class="video-play-btn"></div>
+        <p class="video-slot-label">Pressure · Clip 03</p>
+      </div>
+      -->
+
+    </div>
+
+  </div>
+
+  <div class="chapter-divider"></div>
+
+  <!-- ══════════════════════════════════════════════════
+       CHAPTER 3 — FEAR
+  ═══════════════════════════════════════════════════ -->
+  <div class="chapter" id="fear">
+
+    <p class="section-tag reveal">Chapter 02</p>
+    <h2 class="section-heading reveal" style="transition-delay:.1s">
+      FEAR
+      <em>is the compass.</em>
+    </h2>
+
+    <!-- Quote + copy -->
+    <div class="fear-opening">
+      <div class="fear-quote-left reveal-left" style="transition-delay:.15s">
+        <div class="fear-quote-mark">"</div>
+        <p class="fear-quote-text">
+          "The thing you're most afraid of doing is usually <span>exactly what you need to do</span> next."
+        </p>
+        <p class="fear-quote-attr">— Ashton Logan</p>
+      </div>
+      <div class="fear-right-copy reveal-right" style="transition-delay:.25s">
+        <p>Transferring four times. Starting over at Oklahoma. Starting over at Colorado. Most people called it instability. I called it <strong>proof that I wasn't afraid of discomfort</strong>.</p>
+        <p>Fear tells you where the edge is. <strong>Elite athletes don't avoid the edge — they learn to work there.</strong> Every program I joined felt impossible at first. That feeling was the point.</p>
+        <p>The fear of failure on a punt, on a rep, on a business decision — that's not a warning sign. <strong>It's a signal that it matters.</strong> And things that matter are worth doing scared.</p>
+      </div>
+    </div>
+
+    <!-- ─── FEAR VIDEO ─────────────────────────────────
+         TO ADD MORE FEAR VIDEOS: duplicate this .fear-video-wrap
+         block below, update the src and label.
+         Stack with margin-top: 3px between them.
+    ──────────────────────────────────────────────── -->
+    <div class="fear-video-wrap reveal" id="fv1" style="transition-delay:.2s">
+      <video playsinline preload="none">
+        <source src="media/fear_01.mp4" type="video/mp4"/>
+      </video>
+      <div class="fear-video-overlay"></div>
+      <div class="fear-play-btn"></div>
+      <div class="fear-video-label">
+        <span>Fear · Clip 01</span>
+        Face It.
+      </div>
+    </div>
+
+    <!-- ADD MORE FEAR VIDEOS HERE
+    <div class="fear-video-wrap reveal" id="fv2" style="margin-top:3px;transition-delay:.3s">
+      <video playsinline preload="none">
+        <source src="media/fear_02.mp4" type="video/mp4"/>
+      </video>
+      <div class="fear-video-overlay"></div>
+      <div class="fear-play-btn"></div>
+      <div class="fear-video-label">
+        <span>Fear · Clip 02</span>
+        Use It.
+      </div>
+    </div>
+    -->
+
+    <!-- Three manifesto lines -->
+    <div class="fear-lines">
+      <div class="fear-line-block reveal" style="transition-delay:.1s">
+        <p class="fear-line-num">01 —</p>
+        <p class="fear-line-text">Every transfer was a <strong>decision made in the presence of fear</strong> — and made anyway.</p>
+      </div>
+      <div class="fear-line-block reveal" style="transition-delay:.2s">
+        <p class="fear-line-num">02 —</p>
+        <p class="fear-line-text">The weight room at 5 AM when nobody's watching — <strong>that's where fear gets replaced by faith.</strong></p>
+      </div>
+      <div class="fear-line-block reveal" style="transition-delay:.3s">
+        <p class="fear-line-num">03 —</p>
+        <p class="fear-line-text">Building Logan Brands while still competing — <strong>doing the scary thing before the safe thing runs out.</strong></p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       CLOSING
+  ═══════════════════════════════════════════════════ -->
+  <div class="chapter" id="closing">
+    <p class="closing-label reveal">The Standard</p>
+    <p class="closing-quote reveal" style="transition-delay:.1s">
+      "The field tests your <span>composure</span>. The gym builds your <span>character</span>. Both demand <span>everything</span>."
+    </p>
+    <p class="closing-attr reveal" style="transition-delay:.2s">— Ashton Logan</p>
+    <a href="index.html" class="closing-back reveal" style="transition-delay:.3s">← Return to Site</a>
+  </div>
+
+  <script>
+    // ── CURSOR ──────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+      let mx = 0, my = 0, rx = 0, ry = 0;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      (function tick() {
+        cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+        rx += (mx - rx) * .12; ry += (my - ry) * .12;
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        requestAnimationFrame(tick);
+      })();
+    }
+
+    // ── GATE ────────────────────────────────────────
+    const gate      = document.getElementById('gate');
+    const gateEnter = document.getElementById('gate-enter');
+    const chapInd   = document.getElementById('chapter-indicator');
+
+    gateEnter.addEventListener('click', () => {
+      gate.classList.add('unlocked');
+      document.body.style.overflow = '';
+      chapInd.classList.add('visible');
+      // Trigger intro reveals
+      document.querySelectorAll('#intro .reveal').forEach(el => el.classList.add('visible'));
+    });
+
+    // Lock scroll while gate is up
+    document.body.style.overflow = 'hidden';
+
+    // ── SCROLL REVEAL ────────────────────────────────
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: .1 });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObs.observe(el));
+
+    // ── PROGRESS BAR ─────────────────────────────────
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const total = document.body.scrollHeight - window.innerHeight;
+      progressBar.style.width = (window.scrollY / total * 100) + '%';
+    });
+
+    // ── CHAPTER DOTS ─────────────────────────────────
+    const dots    = document.querySelectorAll('.chap-dot');
+    const chapters = ['intro','pressure','fear','closing'].map(id => document.getElementById(id));
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        document.getElementById(dot.dataset.target).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    const chapObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          dots.forEach(d => {
+            d.classList.toggle('active', d.dataset.target === id);
+          });
+        }
+      });
+    }, { threshold: .4 });
+
+    chapters.forEach(c => { if (c) chapObs.observe(c); });
+
+    // ── VIDEO CLICK TO PLAY/PAUSE ────────────────────
+    // Handles both .video-slot (pressure) and .fear-video-wrap (fear)
+    function initVideoSlot(container) {
+      const vid = container.querySelector('video');
+      if (!vid) return;
+      container.addEventListener('click', () => {
+        if (vid.paused) {
+          vid.play();
+          container.classList.add('playing');
+        } else {
+          vid.pause();
+          container.classList.remove('playing');
+        }
+      });
+    }
+
+    document.querySelectorAll('.video-slot, .fear-video-wrap').forEach(initVideoSlot);
+  </script>
+</body>
+</html>
